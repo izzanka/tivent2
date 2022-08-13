@@ -18,6 +18,6 @@ class Event extends Model
 
     public function tickets()
     {
-        return $this->hasManY(Ticket::class);
+        return $this->hasMany(Ticket::class);
     }
 }
