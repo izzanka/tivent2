@@ -20,4 +20,9 @@ class Event extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
 }
