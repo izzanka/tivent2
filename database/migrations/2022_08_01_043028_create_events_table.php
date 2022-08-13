@@ -18,9 +18,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->text('description');
-            $table->json('category');
+            $table->json('categories');
             $table->string('location');
-            $table->date('date');
+            $table->string('important_information')->nullable();
+            $table->date('start_date');
             $table->timeTz('start_time');
             $table->integer('status')->nullable();
             $table->json('images');
