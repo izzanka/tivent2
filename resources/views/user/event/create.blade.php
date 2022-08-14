@@ -8,22 +8,20 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <nav aria-label="breadcrumb" class="mt-3">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-dark">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('events.index') }}" class="text-dark">Event</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('events.index') }}" class="text-dark">Events</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Create</li>
                 </ol>
             </nav>
         </div>
-        
     </div>
     
-    <form enctype="multipart/form-data" method="post" action="{{ route('events.store') }}">
+    <form enctype="multipart/form-data" method="POST" action="{{ route('events.store') }}">
         @csrf
         <div class="row">
-
             <div class="col-6">
                 <div class="preview-img"></div>
             </div>
@@ -35,7 +33,7 @@
                                 <td>Category</td>
                                 <td>:</td>
                                 <td>
-                                    <select name="category[]" class="form-control selectCategory" multiple="multiple">
+                                    <select name="categories[]" class="form-control selectCategory @error('categories') is-invalid @enderror" multiple="multiple">
                                         <option value="concert">Concert</option>
                                         <option value="festival">Festival</option>
                                         <option value="game">Game</option>
@@ -45,6 +43,11 @@
                                         <option value="education">Education</option>
                                         <option value="culture">Culture</option>
                                     </select>
+                                    @error('categories')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </td>
                             </tr>
 
@@ -65,7 +68,7 @@
                                 <td>Description</td>
                                 <td>:</td>
                                 <td>
-                                    <textarea name="description" id="" cols="15" rows="5" class="form-control">{{ old('name')}}</textarea>
+                                    <textarea name="description" class="form-control">{{ old('name')}}</textarea>
                                     @error('description')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -89,12 +92,12 @@
                             </tr>
                             
                             <tr>
-                                <td>Date</td>
+                                <td>Start Date</td>
                                 <td>:</td>
                                 <td>
-                                    <input type="date" name="date"
-                                        class="form-control @error('date') is-invalid @enderror" value="{{ old('date')}}">
-                                    @error('date')
+                                    <input type="date" name="start_date"
+                                        class="form-control @error('start_date') is-invalid @enderror" value="{{ old('start_date')}}">
+                                    @error('start_date')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -106,9 +109,22 @@
                                 <td>Start Time</td>
                                 <td>:</td>
                                 <td>
-                                    <input type="time" name="time"
-                                        class="form-control @error('time') is-invalid @enderror" value="{{ old('time')}}">
-                                    @error('time')
+                                    <input type="time" name="start_time"
+                                        class="form-control @error('start_time') is-invalid @enderror" value="{{ old('start_time')}}">
+                                    @error('start_time')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Important Information</td>
+                                <td>:</td>
+                                <td>
+                                    <textarea name="important_information" class="form-control">{{ old('important_information')}}</textarea>
+                                    @error('important_information')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -150,18 +166,18 @@
 <script>
     $(document).ready(function() {
         $('.selectCategory').select2({
-            placeholder: "Select Category",
+            placeholder: "select category",
         });
     });
 
-    var previewImages = function(input, imgPreviewPlaceholder) {
+    let previewImages = function(input, imgPreviewPlaceholder) {
         if (input.files) {
-            var filesAmount = input.files.length;
+            let filesAmount = input.files.length;
             for (i = 0; i < filesAmount; i++) {
                 if(i === 3){
                     break;
                 }
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.onload = function(event){
                     let html = '<img class="img-fluid mt-2 rounded mx-auto d-block" alt="*preview image" width="400" height="400">';
                     $($.parseHTML(html)).attr('src', event.target.result).appendTo(imgPreviewPlaceholder);

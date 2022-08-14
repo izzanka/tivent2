@@ -7,14 +7,16 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <nav aria-label="breadcrumb" class="mt-3">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-dark">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Event</li>
+                    <li class="breadcrumb-item active" aria-current="page">Events</li>
                 </ol>
             </nav>
         </div>
+
+        @include('layouts.message')
 
         <div class="col-sm-12">
             <a href="{{ route('events.create') }}" class="btn btn-primary float-right"> Create New Event</a>
@@ -25,36 +27,27 @@
             <div class="card">
 
               @php
-                $arrayImages = json_decode($event->images);
-                $stringImages = implode($images);
-                $idImages = preg_replace('/[^a-zA-Z]/', '', $stringImages);
+                $images = convertImages($event->images);
               @endphp
 
-                <div id="{{ $idImages }}" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-
-                      @for ($i = 1; i < count($arrayImages); $i++)
-                          <li data-target="{{ $idImages }}" data-slide-to="{{ $i }}" class="{{ $loop->first ? 'active' : '' }}"></li>
-                      @endfor
-                    
-                    </ol>
+                <div id="{{ $images[1] }}" class="carousel slide" data-ride="carousel">
 
                     <div class="carousel-inner">
 
-                      @foreach ($arrayImages as $image)
+                      @foreach ($images[0] as $image)
                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                          <img src="{{ asset('storage/img/' . $image) }}" class="img-fluid border border-dark">
+                          <img src="{{ asset('storage/img/' . $image) }}" class="border border-dark" width="538" height="300">
                         </div>
                       @endforeach
 
                     </div>
 
-                    @if (count($arrayImages) > 1)
-                      <button class="carousel-control-prev" type="button" data-target="{{ $idImages }}" data-slide="prev">
+                    @if (count($images[0]) > 1)
+                      <button class="carousel-control-prev" type="button" data-target="#{{ $images[1] }}" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                       </button>
-                      <button class="carousel-control-next" type="button" data-target="{{ $idImages }}" data-slide="next">
+                      <button class="carousel-control-next" type="button" data-target="#{{ $images[1] }}" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                       </button>
@@ -62,19 +55,24 @@
 
                 </div>
                 <div class="card-body">
-                <h5 class="card-title">{{ $event->name }}</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary">Detail</a>
+                  <small class="card-title text-secondary">{{ $event->location }}</small>
+                  <h4 class="card-title"><b>{{ $event->name }}</b></h4>
+                  <p class="card-text">
+                      <a href="{{ route('events.detail', $event->name) }}" class="btn btn-primary">Detail</a>
+                  </p>
                 </div>
             </div>
         </div>
         @empty
         <div class="col-12 text-center mt-4">
-            No Events, <a href="{{ route('events.create') }}"> Create New Events</a>
+            No Events, <a href="{{ route('events.create') }}"> Create New Event</a>
         </div>       
         @endforelse
-    
-        
-    </div>
+      </div>
+         
+      <div class="mt-4">
+        {{ $events->links() }}
+      </div>
+
 </div>
 @endsection
