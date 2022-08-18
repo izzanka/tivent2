@@ -56,12 +56,12 @@ class EventController extends Controller
                 'images' => $jsonImages,
                 'categories' => $jsonCategories,
             ]);
+            
+            return redirect()->route('events.index')->with('message', ['text' => 'Event Created Successfully!', 'class' => 'success']);
 
-            return $this->redirect('events.index', 'Event created successfully!', 'success');
-        
         }catch(Exception $e){
             // Log::error($e->getMessage());
-            return $this->redirect(null, 'Event failed to create, try again!', 'error');
+            return back()->with('message', ['text' => 'Event failed to create, try again!', 'class' => 'danger']);
         }
     }
 
