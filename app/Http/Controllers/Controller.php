@@ -16,12 +16,4 @@ class Controller extends BaseController
         return auth()->user();
     }
 
-    public function redirect($route, $text, $class)
-    {
-        if(!$route){
-            return back()->with('message', ['text' => $text, 'class' => $class]);
-        }
-
-        return redirect()->route($route)->with('message', ['text' => $text, 'class' => $class]);
-    }
 }
