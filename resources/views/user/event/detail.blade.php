@@ -18,6 +18,8 @@ Detail Event
             </nav>
         </div>
 
+        @include('layouts.message')
+
         @php
             $images = convertImages($event->images);
         @endphp
@@ -91,7 +93,7 @@ Detail Event
         <div class="col-12 mt-2">
             <div class="row">
                 <div class="col-6">
-                    <div class="card">
+                    <div class="card text-white bg-secondary">
                         <div class="card-body">
                             <b>Event Started On</b><br>
                             {{ $event->start_date }}
@@ -99,22 +101,35 @@ Detail Event
                     </div>
                 </div>
                 <div class="col-6">
-                    <p>
-                        @forelse ($event->tickets as $ticket)
-                            <div class="card">
-                                <div class="card-body">
-                                    {{ $ticket->name }}
+                    @foreach($event->tickets as $ticket)
+                        <div class="card mb-2 border-secondary">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <b>{{ $ticket->type }}</b><br>
+                                        <p>
+                                            {{ $ticket->description }}
+                                        </p>
+                                    </div>
+                                    <div class="col-4">
+                                        <div style="border-left: 1px solid black; height: 100%">
+                                            <div class="float-right">
+                                                <h5><b>Rp @toRupiah($ticket->price)</b></h5>
+                                                <a href="" class="btn btn-sm btn-outline-success mt-2 float-right"> Select Ticket</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        @empty
-                        <div class="text-center">
-                            Ticket Not Available!
-                            @can('create', $event)
-                            <a href="{{ route('tickets.create', $event) }}"> create new ticket</a>
-                            @endcan
                         </div>
-                        @endforelse
-                    </p>
+                    @endforeach
+                    @can('crud', $event)
+                        <div class="text-center">
+                            <a href="{{ route('tickets.create', $event) }}"> Create New Ticket</a>
+                        </div>
+                    @endcan
+                
+                
                 </div>
             </div>
             <hr>
@@ -123,8 +138,10 @@ Detail Event
             <div class="row">
                 <div class="col"></div>
                 <div class="col-6">
-                    <a href="" class="btn btn-danger float-right"> Delete</a>
-                    <a href="" class="btn btn-primary float-right mr-2"> Edit</a>
+                    @can('crud', $event)
+                        <a href="" class="btn btn-danger float-right"> Delete</a>
+                        <a href="" class="btn btn-primary float-right mr-2"> Edit</a>
+                    @endcan
                 </div>
             </div>
         </div>
