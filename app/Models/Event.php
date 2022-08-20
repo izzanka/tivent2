@@ -28,10 +28,10 @@ class Event extends Model
         return 'name';
     }
 
-    public function startDate(): Attribute
+    public function getStartDate()
     {
-        return Attribute::make(
-            get: fn ($value) => Carbon::createFromFormat('Y-m-d',$value)->format('d M Y')
-        );
+        return Carbon::createFromFormat('Y-m-d',$this->start_date)->format('d M Y');
     }
+
+
 }
