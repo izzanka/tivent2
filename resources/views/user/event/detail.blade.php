@@ -65,7 +65,7 @@ Detail Event
             <div class="row">
                 
                 <div class="col-6">
-                    <b>Location :</b>
+                    <b>Location</b>
                 </div>
                 <div class="col-5">
                     <p>
@@ -79,7 +79,7 @@ Detail Event
         <div class="col-12 mt-2">
             <div class="row">
                 <div class="col-6">
-                    <b>Important Information :</b>
+                    <b>Important Information</b>
                 </div>
                 <div class="col-6">
                     <p>
@@ -96,7 +96,7 @@ Detail Event
                     <div class="card text-white bg-secondary">
                         <div class="card-body">
                             <b>Event Started On</b><br>
-                            {{ $event->start_date }}
+                            {{ $event->getStartDate() }}
                         </div>
                     </div>
                 </div>
@@ -128,24 +128,20 @@ Detail Event
                             <a href="{{ route('tickets.create', $event) }}"> Create New Ticket</a>
                         </div>
                     @endcan
-                
-                
                 </div>
             </div>
             <hr>
         </div>
-        <div class="col-12 mt-2">
+
+        <div class="col-12">
             <div class="row">
-                <div class="col"></div>
                 <div class="col-6">
-                    @can('crud', $event)
-                        <a href="" class="btn btn-danger float-right"> Delete</a>
-                        <a href="" class="btn btn-primary float-right mr-2"> Edit</a>
-                    @endcan
+                    @foreach ($categories as $category)
+                    <span class="badge badge-pill badge-info">{{ $category }}</span>
+                    @endforeach
                 </div>
             </div>
         </div>
-      
     </div>
 </div>
 @endsection

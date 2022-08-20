@@ -34,14 +34,9 @@
                                 <td>:</td>
                                 <td>
                                     <select name="categories[]" class="form-control selectCategory @error('categories') is-invalid @enderror" multiple="multiple">
-                                        <option value="concert">Concert</option>
-                                        <option value="festival">Festival</option>
-                                        <option value="game">Game</option>
-                                        <option value="fashion">Fashion</option>
-                                        <option value="exhibition">Exhibition</option>
-                                        <option value="sport">Sport</option>
-                                        <option value="education">Education</option>
-                                        <option value="culture">Culture</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                        @endforeach
                                     </select>
                                     @error('categories')
                                     <span class="invalid-feedback" role="alert">
@@ -68,7 +63,7 @@
                                 <td>Description</td>
                                 <td>:</td>
                                 <td>
-                                    <textarea name="description" class="form-control">{{ old('name')}}</textarea>
+                                    <textarea name="description" class="form-control">{{ old('description')}}</textarea>
                                     @error('description')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
