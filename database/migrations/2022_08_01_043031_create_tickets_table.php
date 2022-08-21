@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id')->constrained();
             $table->string('description', 125);
-            $table->json('code');
-            $table->json('type');
+            $table->string('type', 125);
             $table->integer('price');
             $table->integer('qty');
             $table->timestamps();
