@@ -26,7 +26,7 @@ class EventController extends Controller
 
     public function index()
     {
-        $events = Event::where('user_id',$this->getUser()->id)->latest()->paginate(4);
+        $events = Event::where('user_id',auth()->user()->id)->latest()->paginate(4);
         return view('user.event.index',compact('events'));
     }
 
@@ -63,7 +63,7 @@ class EventController extends Controller
 
         try{
 
-            $this->getUser()->events()->create([
+            auth()->user()->events()->create([
                 'name' => $request->name,
                 'description' => $request->description,
                 'location' => $request->location,
@@ -82,7 +82,7 @@ class EventController extends Controller
         }
     }
 
-    public function detail(Event $event)
+    public function show(Event $event)
     {
         $categories = json_decode($event->categories);
         return view('user.event.detail', compact('event','categories'));
@@ -122,7 +122,6 @@ class EventController extends Controller
             foreach ($currentImages as $image) {
                 File::delete('storage/img/' . $image);
             }
-        
         }
 
         $jsonImages = json_encode($images);
@@ -147,11 +146,9 @@ class EventController extends Controller
             // Log::error($e->getMessage());
             return back()->with('message', ['text' => 'Event failed to update, try again!', 'class' => 'danger']);
         }
-
-
     }
 
-    public function delete(Event $event)
+    public function destroy(Event $event)
     {
         $images = json_decode($event->images);
 
@@ -170,7 +167,7 @@ class EventController extends Controller
             return back()->with('message',['text' => 'Event successfully deleted!', 'class' => 'success']);
 
         } catch (Exception $e) {
-            
+            return back()->with('message', ['text' => 'Event failed to delete, try again!', 'class' => 'danger']);
         }
     }
 
