@@ -33,5 +33,10 @@ class Event extends Model
         return Carbon::createFromFormat('Y-m-d',$this->start_date)->format('d M Y');
     }
 
+    public function getStartTime()
+    {
+        return Carbon::createFromFormat('H:i:s',$this->start_time)->format('H:i');
+    }
+
 
 }
