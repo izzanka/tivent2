@@ -51,7 +51,7 @@ Home
                 <div class="card-body">
                 <h5 class="card-title">{{ $event->name }}</h5>
                 <p class="card-text">Start From </p>
-                <a href="#" class="btn btn-primary">Check Ticket</a>
+                <a href="{{ route('events.show', $event) }}" class="btn btn-primary">Check Ticket</a>
                 </div>
             </div>
         </div>

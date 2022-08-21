@@ -123,7 +123,7 @@
                                 <td>:</td>
                                 <td>
                                     <input type="time" name="start_time"
-                                        class="form-control @error('start_time') is-invalid @enderror" value="{{ $event->start_time ?? old('start_time')}}">
+                                        class="form-control @error('start_time') is-invalid @enderror" value="{{ $event->getStartTime() ?? old('start_time')}}">
                                     @error('start_time')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -157,7 +157,6 @@
                                     </span>
                                     @enderror
                                 </td>
- 
                                 
                             </tr>
                             <tr>    

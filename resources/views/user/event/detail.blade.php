@@ -53,6 +53,9 @@ Detail Event
         <div class="col-6">
             <small class="text-secondary">{{ $event->location }}</small><br>
                <h4> <b>{{ $event->name }}</b></h4>
+                @foreach ($categories as $category)
+                    <span class="badge badge-pill badge-info">{{ $category }}</span>
+                @endforeach
             <hr>
             <small class="text-secondary">About this event</small>
             <p>
@@ -113,9 +116,19 @@ Detail Event
                                     </div>
                                     <div class="col-4">
                                         <div style="border-left: 1px solid black; height: 100%">
+                                            <form id="destroyTicket-form" action="{{ route('tickets.destroy', $ticket) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                              </form>
                                             <div class="float-right">
                                                 <h5><b>Rp @toRupiah($ticket->price)</b></h5>
-                                                <a href="" class="btn btn-sm btn-outline-success mt-2 float-right"> Select Ticket</a>
+                                                @can('crud',$event)
+                                                <a href="{{ route('tickets.destroy', $ticket) }}" onclick="confirm('Are you sure?');event.preventDefault();
+                                                document.getElementById('destroyTicket-form').submit();" class="btn btn-danger float-right">Delete</a>
+                                                    <a href="{{ route('tickets.edit', $event, $ticket) }}" class="btn btn-sm btn-outline-primary mt-2 float-right mr-2"> Edit</a>
+                                                @else
+                                                    <a href="" class="btn btn-sm btn-outline-success mt-2 float-right"> Select Ticket</a>
+                                                @endcan
                                             </div>
                                         </div>
                                     </div>
@@ -133,15 +146,7 @@ Detail Event
             <hr>
         </div>
 
-        <div class="col-12">
-            <div class="row">
-                <div class="col-6">
-                    @foreach ($categories as $category)
-                    <span class="badge badge-pill badge-info">{{ $category }}</span>
-                    @endforeach
-                </div>
-            </div>
-        </div>
+   
     </div>
 </div>
 @endsection

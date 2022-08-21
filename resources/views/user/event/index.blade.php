@@ -57,9 +57,14 @@
                 <div class="card-body">
                   <small class="card-title text-secondary">{{ $event->location }}</small>
                   <h4 class="card-title"><b>{{ $event->name }}</b></h4>
+                  <form id="destroyEvent-form" action="{{ route('events.destroy', $event) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                  </form>
                   <p class="card-text">
-                      <a href="{{ route('events.detail', $event) }}" class="btn btn-primary">Detail</a>
-                      <a href="{{ route('events.delete', $event) }}" class="btn btn-danger float-right" onclick="return confirm('Are you sure?')">Delete</a>
+                      <a href="{{ route('events.show', $event) }}" class="btn btn-primary">Detail</a>
+                      <a href="{{ route('events.destroy', $event) }}" onclick="confirm('Are you sure?');event.preventDefault();
+                      document.getElementById('destroyEvent-form').submit();" class="btn btn-danger float-right">Delete</a>
                       <a href="{{ route('events.edit', $event) }}" class="btn btn-primary float-right mr-2">Edit</a>
                     </p>
                 </div>

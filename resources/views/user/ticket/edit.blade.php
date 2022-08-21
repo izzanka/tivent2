@@ -12,18 +12,18 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-dark">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('events.index') }}" class="text-dark">Events</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('events.show', $event) }}" class="text-dark">{{ $event->name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('events.detail',$event) }}" class="text-dark">{{ $event->name }}</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('tickets.index') }}" class="text-dark">Tickets</a></li>
-                    <li class="breadcrumb-item active">Create</li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </nav>
         </div>
     </div>
-    <form method="POST" action="{{ route('tickets.store', $event) }}">
+    <form method="POST" action="{{ route('tickets.update') }}">
         @csrf
+        @method('PUT')
         <div class="row">
             <div class="col-6">
-                    
                 @php
                     $images = convertImages($event->images);
                 @endphp
@@ -33,7 +33,6 @@
                         <img src="{{ asset('storage/img/' . $image) }}" class="img-fluid mt-2 rounded mx-auto d-block" alt="*preview image" width="400" height="400">
                     @endforeach
                 </div>
-        
             </div>
             <div class="col-6">
                 <div class="row">
@@ -70,6 +69,7 @@
                                     @enderror
                                 </td>
                             </tr>
+
 
                             <tr>
                                 <td>Price</td>
