@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\EventController;
+use App\Http\Controllers\User\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,26 @@ Route::group(['middleware' => ['auth']], function(){
     //Home
     Route::controller(HomeController::class)->group(function(){
         Route::get('/','index');
-        Route::get('/home','index');
+        Route::get('/home','index')->name('home');
     });
+
+    //Profile
+    Route::view('/profile','user.profile.index')->name('profile.index');
     
-    //Event
-    Route::get('/event/{event}/detail',[EventController::class,'detail'])->name('event.detail');
+    Route::group(['middleware' => ['can:isUser,App\Models\User']], function(){
+
+        //Event
+        Route::resource('events', EventController::class);
+  
+        //Ticket
+        Route::controller(TicketController::class)->group(function(){
+            Route::get('/tickets')->name('tickets.index');
+            Route::get('/events/{event}/tickets/create', 'create')->name('tickets.create');
+            Route::post('/events/{event}/tickets', 'store')->name('tickets.store');
+            Route::get('/events/{event}/tickets/{ticket}/edit', 'edit')->name('tickets.edit');
+            Route::put('/tickets/{ticket}', 'update')->name('tickets.update');
+            Route::delete('/tickets/{ticket}', 'destory')->name('tickets.destroy');
+        });
+    });
+   
 });
