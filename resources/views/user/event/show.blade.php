@@ -116,16 +116,16 @@ Detail Event
                                     </div>
                                     <div class="col-4">
                                         <div style="border-left: 1px solid black; height: 100%">
-                                            <form id="destroyTicket-form" action="{{ route('tickets.destroy', $ticket) }}" method="POST">
+                                            <form id="destroyTicket-form{{ $ticket->type }}" action="{{ route('tickets.destroy', ['event' => $event, 'ticket' => $ticket]) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                               </form>
                                             <div class="float-right">
                                                 <h5><b>Rp @toRupiah($ticket->price)</b></h5>
-                                                @can('crud',$event)
-                                                <a href="{{ route('tickets.destroy', $ticket) }}" onclick="confirm('Are you sure?');event.preventDefault();
-                                                document.getElementById('destroyTicket-form').submit();" class="btn btn-danger float-right">Delete</a>
-                                                    <a href="{{ route('tickets.edit', $event, $ticket) }}" class="btn btn-sm btn-outline-primary mt-2 float-right mr-2"> Edit</a>
+                                                @can('eventCrud',$event)
+                                                    <a href="{{ route('tickets.destroy', ['event' => $event, 'ticket' => $ticket]) }}" onclick="confirm('Are you sure?');event.preventDefault();
+                                                document.getElementById('destroyTicket-form{{ $ticket->type }}').submit();" class="btn btn-sm btn-outline-danger float-right">Delete</a>
+                                                    <a href="{{ route('tickets.edit',['event' => $event, 'ticket' => $ticket]) }}" class="btn btn-sm btn-outline-primary float-right mr-2"> Edit</a>
                                                 @else
                                                     <a href="" class="btn btn-sm btn-outline-success mt-2 float-right"> Select Ticket</a>
                                                 @endcan
@@ -136,7 +136,7 @@ Detail Event
                             </div>
                         </div>
                     @endforeach
-                    @can('crud', $event)
+                    @can('eventCrud', $event)
                         <div class="text-center">
                             <a href="{{ route('tickets.create', $event) }}"> Create New Ticket</a>
                         </div>

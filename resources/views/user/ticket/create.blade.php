@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-dark">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('events.index') }}" class="text-dark">Events</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('events.show', $event) }}" class="text-dark">{{ $event->name }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('tickets.index') }}" class="text-dark">Tickets</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('events.show', $event) }}" class="text-dark">Tickets</a></li>
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
             </nav>

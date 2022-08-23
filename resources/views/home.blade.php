@@ -12,23 +12,13 @@ Home
             <div class="card">
 
               @php
-                $arrayImages = json_decode($event->images);
-                $stringImages = implode($images);
-                $idImages = preg_replace('/[^a-zA-Z]/', '', $stringImages);
+                $images = convertImages($event->images);
               @endphp
 
-                <div id="{{ $idImages }}" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-
-                      @for ($i = 1; i < count($arrayImages); $i++)
-                          <li data-target="{{ $idImages }}" data-slide-to="{{ $i }}" class="{{ $loop->first ? 'active' : '' }}"></li>
-                      @endfor
-                    
-                    </ol>
-
+                <div id="{{ $images[1] }}" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
 
-                      @foreach ($arrayImages as $image)
+                      @foreach ($images[0] as $image)
                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                           <img src="{{ asset('storage/img/' . $image) }}" class="img-fluid border border-dark">
                         </div>
@@ -36,12 +26,12 @@ Home
 
                     </div>
 
-                    @if (count($arrayImages) > 1)
-                      <button class="carousel-control-prev" type="button" data-target="{{ $idImages }}" data-slide="prev">
+                    @if (count($images[0]) > 1)
+                      <button class="carousel-control-prev" type="button" data-target="{{ $images[1] }}" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                       </button>
-                      <button class="carousel-control-next" type="button" data-target="{{ $idImages }}" data-slide="next">
+                      <button class="carousel-control-next" type="button" data-target="{{ $images[1] }}" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                       </button>
