@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained();
-            $table->string('description', 125);
+            $table->string('description', 125)->nullable();
             $table->string('type', 125);
             $table->integer('price');
             $table->integer('qty');
