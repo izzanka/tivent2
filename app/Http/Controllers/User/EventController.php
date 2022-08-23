@@ -7,14 +7,13 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 
 class EventController extends Controller
 {
     public function __construct(){
-        $this->middleware('can:crud,event')->only(['edit','update','delete']);
+        $this->middleware('can:eventCrud,event')->only(['edit','update','delete']);
     }
 
     public function storeImage($image)
@@ -77,7 +76,6 @@ class EventController extends Controller
             return redirect()->route('events.index')->with('message', ['text' => 'Event Created Successfully!', 'class' => 'success']);
 
         }catch(Exception $e){
-            // Log::error($e->getMessage());
             return back()->with('message', ['text' => 'Event failed to create, try again!', 'class' => 'danger']);
         }
     }
@@ -85,7 +83,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         $categories = json_decode($event->categories);
-        return view('user.event.detail', compact('event','categories'));
+        return view('user.event.show', compact('event','categories'));
     }
 
     public function edit(Event $event)
@@ -113,6 +111,7 @@ class EventController extends Controller
         $images = [];
 
         if ($request->hasFile('images')) {
+            
             foreach($request->file('images') as $image){
                $images[] = $this->storeImage($image);
             }

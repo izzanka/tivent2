@@ -9,6 +9,10 @@ use App\Http\Controllers\Controller;
 
 class TicketController extends Controller
 {
+    public function __construct(){
+        $this->middleware('can:eventCrud,event')->only(['create','store','edit','update','destroy']);
+    }
+
     public function collectionType($type)
     {
         $types = [];
@@ -28,7 +32,7 @@ class TicketController extends Controller
         $types = $checkType[1];
 
         if($checkType[0]->doesntContain(false)){
-            return back()->with('message', ['text' => 'All Type Of Ticket Already Created!', 'class' => 'warning']);
+            return back()->with('message', ['text' => 'All type of tickets already created!', 'class' => 'warning']);
         }
 
         return view('user.ticket.create', compact('event','types'));
@@ -43,18 +47,12 @@ class TicketController extends Controller
             'qty' => 'required|numeric'
         ]);
 
-        $checkType = $this->collectionType($event->tickets);
-        
-        if($checkType->contains($request->type)){
-            return back()->with('message', ['text' => ' ' . $type .'  Ticket Already Created!', 'class' => 'warning']);
-        }
-
         try {
 
             $event->tickets()->create($validated);
             return redirect()->route('events.show', $event)->with('message', ['text' => 'Ticket created successfully!', 'class' => 'success']);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             return back()->with('message', ['text' => 'Ticket failed to create!', 'class' => 'danger']);
 
@@ -66,13 +64,39 @@ class TicketController extends Controller
         return view('user.ticket.edit', compact('event','ticket'));
     }
 
-    public function update(Request $request, Ticket $ticket)
+    public function update(Request $request, Event $event, Ticket $ticket)
     {
+        $validated = $request->validate([
+            'type' => 'required|string',
+            'description' => 'max:125',
+            'price' => 'required|numeric',
+            'qty' => 'required|numeric'
+        ]);
 
+        try {
+
+            $event->tickets()->update($validated);
+            return redirect()->route('events.show', $event)->with('message', ['text' => 'Ticket updated successfully!', 'class' => 'success']);
+
+        } catch (\Exception $e) {
+
+            return back()->with('message', ['text' => 'Ticket failed to update!', 'class' => 'danger']);
+
+        }
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Event $event, Ticket $ticket)
     {
+        try {
 
+            $ticket->delete();
+
+            return redirect()->route('events.show', $event)->with('message', ['text' => 'Ticket deleted successfully!', 'class' => 'success']);
+
+        } catch (\Exception $e) {
+
+            return back()->with('message', ['text' => 'Ticket failed to delete!', 'class' => 'danger']);
+
+        }
     }
 }
