@@ -11,7 +11,7 @@ class EventPolicy
 {
     use HandlesAuthorization;
 
-    public function crud(User $user, Event $event)
+    public function eventCrud(User $user, Event $event)
     {
         return $user->id === $event->user_id ? Response::allow() : Response::denyAsNotFound();
     }
