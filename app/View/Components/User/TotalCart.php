@@ -2,10 +2,10 @@
 
 namespace App\View\Components\User;
 
-use App\Models\Event;
+use App\Models\Order;
 use Illuminate\View\Component;
 
-class TotalEvent extends Component
+class TotalCart extends Component
 {
     /**
      * Create a new component instance.
@@ -24,7 +24,7 @@ class TotalEvent extends Component
      */
     public function render()
     {
-        $totalEvent = Event::where('user_id', auth()->id())->count();
-        return view('components.user.total-event',compact('totalEvent'));
+        $totalOrder = Order::where('user_id', auth()->id())->count();
+        return view('components.user.total-cart', compact('totalOrder'));
     }
 }
