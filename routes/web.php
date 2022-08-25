@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\EventController;
 use App\Http\Controllers\User\TicketController;
 
@@ -32,6 +33,7 @@ Route::group(['middleware' => ['auth']], function(){
 
         //Event
         Route::resource('events', EventController::class);
+        Route::get('/events/city/{provinceId}', [EventController::class, 'getCity'])->name('events.city');
   
         //Ticket
         Route::controller(TicketController::class)->group(function(){
@@ -41,6 +43,11 @@ Route::group(['middleware' => ['auth']], function(){
             Route::put('/events/{event}/tickets/{ticket}', 'update')->name('tickets.update');
             Route::delete('/events/{event}/tickets/{ticket}', 'destroy')->name('tickets.destroy');
         });
+
+        //Cart
+        Route::controller(CartController::class)->group(function(){
+            
+        }); 
     });
    
 });
