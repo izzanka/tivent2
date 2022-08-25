@@ -18,6 +18,16 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -31,6 +41,16 @@ class Event extends Model
     public function getStartDate()
     {
         return Carbon::createFromFormat('Y-m-d',$this->start_date)->format('d M Y');
+    }
+
+    public function getDate()
+    {
+        return Carbon::createFromFormat('Y-m-d',$this->start_date)->format('d');
+    }
+
+    public function getMonth()
+    {
+        return Carbon::createFromFormat('Y-m-d',$this->start_date)->format('M');
     }
 
     public function getStartTime()
