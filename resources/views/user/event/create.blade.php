@@ -30,7 +30,7 @@
                     <div class="col">
                         <table class="table" style="border-top : hidden">
                             <tr>
-                                <td>Category</td>
+                                <td>Category (max:3)</td>
                                 <td>:</td>
                                 <td>
                                     <select name="categories[]" class="form-control selectCategory @error('categories') is-invalid @enderror" multiple="multiple">
@@ -71,21 +71,35 @@
                                     @enderror
                                 </td>
                             </tr>
-                      
                             <tr>
                                 <td>Location</td>
                                 <td>:</td>
                                 <td>
-                                    <input type="text" name="location"
-                                        class="form-control @error('location') is-invalid @enderror" value="{{ old('location')}}">
-                                    @error('location')
+                                    <select name="province_id" class="form-control">
+                                        <option value="">Select province</option>
+                                        @foreach($provinces as $province)
+                                            <option value="{{$province->id}}">{{$province->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <select name="city_id" class="form-control mt-2">
+                                        <option value="">Select city</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>:</td>
+                                <td>
+                                    <input type="text" name="address"
+                                        class="form-control @error('address') is-invalid @enderror" value="{{ old('address')}}">
+                                    @error('address')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
                                 </td>
                             </tr>
-                            
+                    
                             <tr>
                                 <td>Start Date</td>
                                 <td>:</td>
@@ -118,8 +132,8 @@
                                 <td>Important Information</td>
                                 <td>:</td>
                                 <td>
-                                    <textarea name="important_information" class="form-control">{{ old('important_information')}}</textarea>
-                                    @error('important_information')
+                                    <textarea name="information" class="form-control">{{ old('information')}}</textarea>
+                                    @error('information')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -128,7 +142,7 @@
                             </tr>
                           
                             <tr>
-                                <td>Images (max: 3)</td>
+                                <td>Images (max:3)</td>
                                 <td>:</td>
                                 <td>
                                     <input type="file" accept="image/*" class="form-control" name="images[]" multiple id="images">
@@ -164,6 +178,29 @@
             placeholder: "select category",
         });
     });
+
+    $('select[name="province"]').on('change', function () {
+        let provinceId = $(this).val();
+        console.log(provinceId);
+        if (provinceId) {
+            $.ajax({
+                url: '/events/city/' + provinceId,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $('select[name="city"]').empty();
+                    $.each(data, function (key, value) {
+                        $('select[name="city"]').append(
+                            '<option value="' +
+                            key + '">' + value + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('select[name="city"]').empty();
+        }
+    });
+       
 
     let previewImages = function(input, imgPreviewPlaceholder) {
         if (input.files) {
