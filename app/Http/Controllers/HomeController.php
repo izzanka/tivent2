@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $events = Event::latest()->where('status',0)->paginate(4);
+        $events = Event::latest()->where('status',0)->whereHas('tickets')->paginate(4);
         return view('home',compact('events'));
     }
 }

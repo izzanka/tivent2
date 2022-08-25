@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use Exception;
+use App\Models\City;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Category;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -23,6 +25,12 @@ class EventController extends Controller
         return $imageName;
     }
 
+    public function getCity($provinceId)
+    {
+        $cities = City::select('name','id')->where('province_id',$provinceId)->pluck('name','id');
+        return json_encode($cities);
+    }
+
     public function index()
     {
         $events = Event::where('user_id',auth()->user()->id)->latest()->paginate(4);
@@ -32,7 +40,9 @@ class EventController extends Controller
     public function create()
     {
         $categories = Category::select('name')->get();
-        return view('user.event.create', compact('categories'));
+        $provinces = Province::select('id','name')->get();
+        $cities = City::select('id','province_id','name')->get();
+        return view('user.event.create', compact('categories','provinces','cities'));
     }
 
     public function store(Request $request)
@@ -41,8 +51,10 @@ class EventController extends Controller
             'name' => 'required|string',
             'description' => 'required',
             'categories' => 'required',
-            'location' => 'required|string',
-            'important_information' => 'string',
+            'province_id' => 'string|required',
+            'city_id' => 'string|required',
+            'address' => 'required|string',
+            'information' => 'string',
             'start_time' => 'required',
             'start_date' => 'required|after:today',
             'images' => 'required',
@@ -57,6 +69,8 @@ class EventController extends Controller
             }
         }
 
+        dd($request->categories);
+
         $jsonImages = json_encode($images);
         $jsonCategories = json_encode($request->categories);
 
@@ -65,8 +79,10 @@ class EventController extends Controller
             auth()->user()->events()->create([
                 'name' => $request->name,
                 'description' => $request->description,
-                'location' => $request->location,
-                'important_information' => $request->important_information,
+                'province_id' => $request->province_id,
+                'city_id' => $request->city_id,
+                'address' => $request->address,
+                'information' => $request->information,
                 'start_time' => $request->start_time,
                 'start_date' => $request->start_date,
                 'images' => $jsonImages,
@@ -100,8 +116,10 @@ class EventController extends Controller
             'name' => 'required|string',
             'description' => 'required',
             'categories' => 'required',
-            'location' => 'required|string',
-            'important_information' => 'string',
+            'province_id' => 'required|string',
+            'city_id' => 'required|string',
+            'address' => 'required|string',
+            'information' => 'string',
             'start_time' => 'required',
             'start_date' => 'required|after:today',
             'images' => '',
@@ -131,8 +149,10 @@ class EventController extends Controller
             $event->update([
                 'name' => $request->name,
                 'description' => $request->description,
-                'location' => $request->location,
-                'important_information' => $request->important_information,
+                'province_id' => $request->province_id,
+                'city_id' => $request->city_id,
+                'address' => $request->address,
+                'information' => $request->information,
                 'start_time' => $request->start_time,
                 'start_date' => $request->start_date,
                 'images' => $images ? $jsonImages : $event->images,
