@@ -16,14 +16,16 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('province_id')->constrained();
+            $table->foreignId('city_id')->constrained();
             $table->string('name');
             $table->text('description');
             $table->json('categories');
-            $table->string('location');
-            $table->string('important_information')->nullable();
+            $table->string('address');
+            $table->string('information')->nullable();
             $table->date('start_date');
             $table->timeTz('start_time');
-            $table->integer('status')->nullable();
+            $table->integer('status')->default(0);
             $table->json('images');
             $table->timestamps();
             $table->softDeletes();
